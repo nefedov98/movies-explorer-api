@@ -1,0 +1,25 @@
+{
+  "name": "diplom",
+  "author": "nefedov",
+  "devDependencies": {
+    "nodemon": "^2.0.15",
+    "eslint": "^8.7.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.4"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "celebrate": "^15.0.0",
+    "express": "^4.17.2",
+    "express-winston": "^4.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.1.6",
+    "validator": "^13.7.0",
+    "winston": "^3.4.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "lint": "npx eslint ."
+  }
+}
