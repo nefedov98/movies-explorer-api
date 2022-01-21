@@ -8,10 +8,19 @@ const idValidation = celebrate({
   }),
 });
 
-const cardValidation = celebrate({
+const movieValidation = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required().pattern(linkRegExp),
+    movieId: Joi.number().integer().required(),
+    country: Joi.string().required(),
+    director: Joi.string().required(),
+    duration: Joi.number().required(),
+    year: Joi.string().required(),
+    description: Joi.string().required(),
+    image: Joi.string().required(),
+    trailer: Joi.string().required(),
+    thumbnail: Joi.string().required(),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
   }),
 });
 
@@ -39,7 +48,7 @@ const userValidation = celebrate({
 });
 
 module.exports = {
-  cardValidation,
+  movieValidation,
   userUpdateValidation,
   idValidation,
   linkRegExp,
