@@ -10,7 +10,7 @@ const { NotFoundError } = require('./errors/NotFoundError');
 
 const { NODE_ENV } = process.env;
 
-const BD_ADRESS = NODE_ENV === 'production' ? BD_ADRESS : 'mongodb://localhost:27017/moviesdb';
+const BD_ADRESS = NODE_ENV === 'production' ? BD_ADRESS : 'mongodb://localhost:27017/bitfilmsdb';
 
 mongoose.connect(BD_ADRESS, {
   useNewUrlParser: true,
