@@ -1,6 +1,6 @@
 const { Router } = require('express');
-const userRouter = require('../routes/user');
-const movieRouter = require('../routes/movie');
+const userRouter = require('./user');
+const movieRouter = require('./movie');
 const auth = require('../middlewares/auth');
 const { login, createUser, userLogout } = require('../controllers/user');
 const { loginValidation, userValidation } = require('../middlewares/validate');

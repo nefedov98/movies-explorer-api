@@ -12,8 +12,7 @@ const LIMITER_MSG = 'Превышен лимит запросов!';
 const IS_NOT_URL = 'Здесь должна быть ссылка!';
 const IS_NOT_EMAIL = 'Введён некорректный email!';
 const IS_NOT_OK = 'Переданы некорректные данные';
-const IS_NOT_EMAIL_PASSWORD= 'Неправильные почта или пароль';
-
+const IS_NOT_EMAIL_PASSWORD = 'Неправильные почта или пароль';
 
 module.exports = {
   IS_NOT_EMAIL_PASSWORD,
