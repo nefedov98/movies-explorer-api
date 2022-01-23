@@ -1,6 +1,7 @@
 const Movie = require('../models/movie');
 const { ForbiddenError } = require('../errors/ForbiddenError');
 const { BadRequestError } = require('../errors/BadRequestError');
+const { IS_NOT_OK, FORBIDDEN } = require('../utils/constants');
 
 const getMovies = (req, res, next) => {
   Movie.find({})
@@ -41,7 +42,7 @@ const createMovie = (req, res, next) => {
     .then((movie) => res.send({ data: movie }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы некорректные данные');
+        throw new BadRequestError(IS_NOT_OK);
       }
       throw err;
     })
@@ -54,13 +55,13 @@ const deleteMovie = (req, res, next) => {
 
   Movie.findById(_id)
     .orFail()
-    .catch(() => next(new BadRequestError('Переданы некорректные данные')))
+    .catch(() => next(new BadRequestError(IS_NOT_OK)))
     .then((movie) => {
       if (movie.owner.toString() === ownerId) {
         return Movie.findByIdAndRemove(_id)
           .then((movieData) => res.send(movieData));
       }
-      throw new ForbiddenError('Недостаточно прав!');
+      throw new ForbiddenError(FORBIDDEN);
     })
     .catch(next);
 };

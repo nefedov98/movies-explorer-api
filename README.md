@@ -1,2 +1,2 @@
 # movies-explorer-api
-# https://nefedov.diplom.nomoredomains.work/
+# https://nefedov.diplom.nomoredomains.work/api/

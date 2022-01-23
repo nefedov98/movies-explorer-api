@@ -1,6 +1,7 @@
 const { Schema, model } = require('mongoose');
 // const { AuthError } = require('../errors/AuthError');
-const linkRegExp = require('../middlewares/validate');
+const linkRegExp = /(http:\/\/|https:\/\/)(www)*[a-z0-9\-._~:/?#[\]@!$&'()*+,;=]+#*/;
+const { IS_NOT_URL } = require('../utils/constants');
 
 const movieSchema = new Schema({
   country: {
@@ -30,7 +31,7 @@ const movieSchema = new Schema({
       validator(link) {
         return linkRegExp.test(link);
       },
-      message: 'Здесь должна быть ссылка',
+      message: IS_NOT_URL,
     },
   },
   trailer: {
@@ -40,7 +41,7 @@ const movieSchema = new Schema({
       validator(link) {
         return linkRegExp.test(link);
       },
-      message: 'Здесь должна быть ссылка',
+      message: IS_NOT_URL,
     },
   },
   thumbnail: {
@@ -50,7 +51,7 @@ const movieSchema = new Schema({
       validator(link) {
         return linkRegExp.test(link);
       },
-      message: 'Здесь должна быть ссылка',
+      message: IS_NOT_URL,
     },
   },
   owner: {

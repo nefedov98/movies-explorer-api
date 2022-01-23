@@ -1,16 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const userRouter = require('./routes/user');
-const movieRouter = require('./routes/movie');
-const auth = require('./middlewares/auth');
+const limiter = require('./help/limiter');
 const router = require('./routes/index');
-const { NotFoundError } = require('./errors/NotFoundError');
-
+const { DEFAULT } = require('./utils/constants');
 const { NODE_ENV } = process.env;
 
-const BD_ADRESS = NODE_ENV === 'production' ? BD_ADRESS : 'mongodb://localhost:27017/bitfilmsdb';
+const BD_ADRESS = NODE_ENV === 'production' ? BD_ADRESS : 'mongodb://localhost:27017/moviesdb';
 
 mongoose.connect(BD_ADRESS, {
   useNewUrlParser: true,
@@ -20,6 +18,7 @@ const app = express();
 console.log('Работает');
 
 app.use(express.json());
+app.use(helmet());
 
 // app.get('/crash-test', () => {
 //   setTimeout(() => {
@@ -27,13 +26,9 @@ app.use(express.json());
 //   }, 0);
 // });
 app.use(requestLogger);
+app.use(limiter);
 app.use(router);
-app.use('/', auth, userRouter);
-app.use('/', auth, movieRouter);
 
-app.use('*', () => {
-  throw new NotFoundError('Запрашиваемый ресурс не найден');
-});
 
 app.use(errorLogger);
 
@@ -45,7 +40,7 @@ app.use((err, req, res, next) => {
     .status(statusCode)
     .send({
       message: statusCode === 500
-        ? 'На сервере произошла ошибка'
+        ? DEFAULT
         : message,
     });
   next();

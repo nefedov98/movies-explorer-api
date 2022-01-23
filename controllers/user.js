@@ -5,6 +5,7 @@ const User = require('../models/user');
 const { NotFoundError } = require('../errors/NotFoundError');
 const { BadRequestError } = require('../errors/BadRequestError');
 const { ConflictError } = require('../errors/ConflictError');
+const { AUTH_SUCCES, LOGOUT_SUCCES, CONFLICT, NOT_FOUND_USER, IS_NOT_OK} = require('../utils/constants');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
 
@@ -21,8 +22,12 @@ const createUser = (req, res, next) => {
       },
     }))
     .catch((err) => {
-      if (err.name === 'MongoError' && err.code === 11000) {
-        throw new ConflictError('Пользователь с таким email уже существует');
+      if (err.code === 11000) {
+        throw new ConflictError(CONFLICT);
+      } else if (err.name === 'CastError') {
+        throw new BadRequestError(IS_NOT_OK);
+      } else if (err.code = 400) {
+        throw new BadRequestError(IS_NOT_OK);
       }
       throw err;
     })
@@ -35,14 +40,14 @@ const updateUser = (req, res, next) => {
 
   User.findByIdAndUpdate(userId, { name, email }, { new: true, runValidators: true })
     .orFail(() => {
-      throw new NotFoundError('Пользователь с таким id не найден');
+      throw new NotFoundError(NOT_FOUND_USER);
     })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        throw new BadRequestError('Переданы некорректные данные');
-      } else if (err.name === 'CastError') {
-        throw new BadRequestError('Переданы некорректные данные');
+      if (err.name === 'ValidationError' || err.name === 'CastError') {
+        throw new BadRequestError(IS_NOT_OK);
+      } else if (err.code === 11000) {
+        throw new ConflictError(CONFLICT);
       }
       throw err;
     })
@@ -52,12 +57,13 @@ const updateUser = (req, res, next) => {
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(() => {
-      throw new NotFoundError('Пользователь с таким id не найден');
+      throw new NotFoundError(NOT_FOUND_USER);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        throw new BadRequestError('Переданы некорректные данные');
+        throw new BadRequestError(IS_NOT_OK);
       }
+      throw err;
     })
     .then((currentUser) => res.send({ currentUser }))
     .catch(next);
@@ -78,13 +84,13 @@ const login = (req, res, next) => {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
       })
-        .send(token);
+        .send({ message: AUTH_SUCCES });
     })
     .catch(next);
 };
 
 const userLogout = (req, res) => {
-  res.clearCookie('jwt').send({ message: 'Вы успешно разлогинились!' });
+  res.clearCookie('jwt').send({ message: LOGOUT_SUCCES });
 };
 
 module.exports = {

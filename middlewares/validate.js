@@ -1,4 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
+const validator = require('validator');
 
 const linkRegExp = /(http:\/\/|https:\/\/)(www)*[a-z0-9\-\.\_\~\:\/\?\#\[\]\@\!\$\&\'\(\)\*\+\,\;\=]+#*/;
 
@@ -16,15 +17,25 @@ const movieValidation = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required(),
-    trailer: Joi.string().required(),
+    image: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Поле image заполнено некорректно');
+    }),
+    trailer: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Поле trailer заполнено некорректно');
+    }),
     thumbnail: Joi.string().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
   }),
 });
 
-const userUpdateValidation  = celebrate({
+const userUpdateValidation = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
