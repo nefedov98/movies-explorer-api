@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./help/limiter');
@@ -17,6 +18,7 @@ const app = express();
 console.log('Работает');
 
 app.use(express.json());
+app.use(helmet());
 
 app.get('/crash-test', () => {
   setTimeout(() => {
