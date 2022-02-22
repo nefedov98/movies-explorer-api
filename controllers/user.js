@@ -80,11 +80,7 @@ const login = (req, res, next) => {
         { expiresIn: '7d' },
       );
 
-      res.cookie('jwt', token, {
-        maxAge: 3600000 * 24 * 7,
-        httpOnly: true,
-      })
-        .send({ message: AUTH_SUCCES });
+      res.send({ token });
     })
     .catch(next);
 };
