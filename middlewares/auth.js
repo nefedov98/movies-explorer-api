@@ -5,7 +5,7 @@ const { AUTH } = require('../utils/constants');
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const auth = (req, res, next) => {
-  const authorization = req.headers.cookie;
+  const { authorization } = req.headers;
   const { asas } = req.headers;
   console.log(1);
   console.log(req.headers);
@@ -14,11 +14,11 @@ const auth = (req, res, next) => {
   console.log(3);
   console.log(asas);
 
-  if (!authorization || !authorization.startsWith('jwt=')) {
+  if (!authorization || !authorization.startsWith('Bearer ')) {
     throw new AuthError(AUTH);
   }
 
-  const token = authorization.replace('jwt=', '');
+  const token = authorization.replace('Bearer ', '');
   let payload;
 
   try {
