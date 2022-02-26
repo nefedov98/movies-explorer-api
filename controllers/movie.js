@@ -5,7 +5,7 @@ const { IS_NOT_OK, FORBIDDEN } = require('../utils/constants');
 
 const getMovies = (req, res, next) => {
   Movie.find({})
-    .then((movies) => res.send({ data: movies }))
+    .then((movies) => res.send(movies))
     .catch(next);
 };
 
@@ -39,7 +39,7 @@ const createMovie = (req, res, next) => {
     movieId,
     owner,
   })
-    .then((movie) => res.send({ data: movie }))
+    .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError(IS_NOT_OK);
