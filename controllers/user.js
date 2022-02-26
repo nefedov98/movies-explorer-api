@@ -65,7 +65,7 @@ const getCurrentUser = (req, res, next) => {
       }
       throw err;
     })
-    .then((currentUser) => res.send({ currentUser }))
+    .then((currentUser) => res.send(currentUser))
     .catch(next);
 };
 
