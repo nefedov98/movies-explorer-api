@@ -6,14 +6,6 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
-  const { asas } = req.headers;
-  console.log(1);
-  console.log(req.headers);
-  console.log(2);
-  console.log(authorization);
-  console.log(3);
-  console.log(asas);
-
   if (!authorization || !authorization.startsWith('Bearer ')) {
     throw new AuthError(AUTH);
   }

@@ -58,6 +58,13 @@ const userValidation = celebrate({
   }),
 });
 
+const movieIdValidator = celebrate({
+  params: Joi.object().keys({
+    movieId: Joi.string().alphanum().length(24).hex()
+      .message('Передан не валидный id.'),
+  }).unknown(true),
+});
+
 module.exports = {
   movieValidation,
   userUpdateValidation,
@@ -65,4 +72,5 @@ module.exports = {
   linkRegExp,
   loginValidation,
   userValidation,
+  movieIdValidator
 };
