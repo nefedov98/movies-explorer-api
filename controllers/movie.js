@@ -4,8 +4,8 @@ const { BadRequestError } = require('../errors/BadRequestError');
 const { IS_NOT_OK, FORBIDDEN } = require('../utils/constants');
 
 const getMovies = (req, res, next) => {
-  Movie.find({})
-    .then((movies) => res.send(movies))
+  Movie.find({ owner: req.user._id })
+    .then((movie) => res.send(movie))
     .catch(next);
 };
 
